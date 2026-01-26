@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -23,7 +25,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.soundmodes.ui.theme.SoundModesTheme
-
 
 
 class MainActivity : ComponentActivity() {
@@ -40,7 +41,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppMainView() {
     SoundModesTheme {
-        Scaffold(modifier = Modifier.fillMaxSize(),
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
             topBar = {
                 AppBar()
             }
@@ -62,7 +64,7 @@ private fun AppBar(
         modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primary)
-            .padding(16.dp),
+            .padding(top = 40.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -78,21 +80,87 @@ private fun AppBar(
 
 @Composable
 fun MainColumn(name: String, modifier: Modifier = Modifier) {
-    Column(modifier = modifier) {
-        Card(modifier = Modifier
-            .fillMaxWidth()) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(8.dp),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
             Text(
                 text = "Hello $name!",
                 modifier = modifier
             )
         }
-        Card(modifier = Modifier
-            .fillMaxWidth()) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
             Text(
                 text = "Hello $name!",
                 modifier = modifier
             )
         }
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = "Hello $name!",
+                modifier = modifier
+            )
+        }
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = "Hello $name!",
+                modifier = modifier
+            )
+        }
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = "Hello $name!",
+                modifier = modifier
+            )
+        }
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = "Hello $name!",
+                modifier = modifier
+            )
+        }
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = "Hello $name!",
+                modifier = modifier
+            )
+        }
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = "Hello $name!",
+                modifier = modifier
+            )
+        }
+
     }
 }
 
