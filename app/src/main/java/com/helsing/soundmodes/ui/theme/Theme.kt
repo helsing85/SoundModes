@@ -1,6 +1,5 @@
-package com.example.soundmodes.ui.theme
+package com.helsing.soundmodes.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

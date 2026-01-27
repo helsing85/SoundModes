@@ -1,4 +1,4 @@
-package com.example.soundmodes
+package com.helsing.soundmodes
 
 import org.junit.Test
 

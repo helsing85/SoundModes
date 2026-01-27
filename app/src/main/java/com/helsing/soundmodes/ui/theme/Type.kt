@@ -1,4 +1,4 @@
-package com.example.soundmodes.ui.theme
+package com.helsing.soundmodes.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

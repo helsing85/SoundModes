@@ -5,13 +5,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.soundmodes"
+    namespace = "com.helsing.soundmodes"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.example.soundmodes"
+        applicationId = "com.helsing.soundmodes"
         minSdk = 35
         targetSdk = 36
         versionCode = 1

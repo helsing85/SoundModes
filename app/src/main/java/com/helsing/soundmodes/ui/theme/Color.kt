@@ -1,4 +1,4 @@
-package com.example.soundmodes.ui.theme
+package com.helsing.soundmodes.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
