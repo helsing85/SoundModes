@@ -103,7 +103,7 @@ fun MainColumn(isPreview: Boolean, modifier: Modifier = Modifier) {
 
     var showDialog by remember { mutableStateOf(false) }
 
-    var isAccessibilityEnabled by remember {
+    var isNotificationPolicyAccessGranted by remember {
         mutableStateOf(isNotificationPolicyAccessPermissionEnabled(context, isPreview))
     }
 
@@ -154,10 +154,10 @@ fun MainColumn(isPreview: Boolean, modifier: Modifier = Modifier) {
                     )
                     Button(
                         onClick = { showDialog = true },
-                        enabled = !isAccessibilityEnabled,
+                        enabled = !isNotificationPolicyAccessGranted,
                     ) {
                         Text(
-                            text = if (isAccessibilityEnabled) {
+                            text = if (isNotificationPolicyAccessGranted) {
                                 stringResource(R.string.enabled)
                             } else {
                                 stringResource(R.string.enable)
