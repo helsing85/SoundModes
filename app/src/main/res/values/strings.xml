@@ -1,12 +1,17 @@
 <resources>
     <string name="app_name">Sound Modes</string>
     <string name="description">With this app, you can create an Android quick setting tile to toggle sound options. Access to modes (Do not Disturbed) permission is required for this to work.</string>
-    <string name="required_permission">Required Permission</string>
+    <string name="required_permission">Required Permissions</string>
     <string name="notification_policy_access">Notification Policy Access</string>
     <string name="enable">Enable</string>
     <string name="enabled">Enabled</string>
     <string name="agree">Agree</string>
     <string name="not_now">Not now</string>
     <string name="notification_policy_access_permission_title">Notification Policy Access Permission Required</string>
-    <string name="notification_policy_access_permission_description">Application needs Notification Policy Access to mute all sounds on your device. It does not collect any data or interactions that you have with your device.</string>
+    <string name="notification_policy_access_permission_description">Application needs Notification Policy Access to mute all sounds on your device.</string>
+    <string name="normal">Normal</string>
+    <string name="vibrate">Vibrate</string>
+    <string name="silent">Silent</string>
+    <string name="unknown">Unknown</string>
+    <string name="silent_mode">Silent Mode</string>
 </resources>
