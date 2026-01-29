@@ -2,6 +2,7 @@ package com.helsing.soundmodes
 
 import android.app.AutomaticZenRule
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
@@ -133,6 +134,24 @@ class SoundModesService : TileService() {
     }
 
     fun changeSoundMode() {
+        if (!isNotificationPolicyAccessPermissionEnabled(this@SoundModesService)) {
+            val intent = Intent(this, MainActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                putExtra(resources.getString(R.string.toast_name_permission), true)
+            }
+
+            // PendingIntent required for Androida 14+
+            val pendingIntent = PendingIntent.getActivity(
+                this,
+                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+            startActivityAndCollapse(pendingIntent)
+            return
+        }
+
+
         val currentMode: Int = audioManager.ringerMode
 
         val nextMode: Int = getNextMode(currentMode)

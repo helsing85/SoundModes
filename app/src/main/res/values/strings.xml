@@ -1,11 +1,13 @@
 <resources>
     <string name="app_name">Sound Modes</string>
     <string name="zen_rule_condition_uri" translatable="false">condition://com.helsing.soundmodes/silent_mode</string>
+    <string name="toast_name_permission" translatable="false">SHOW_PERMISSION_TOAST</string>
     <string name="description">With this app, you can create an Android quick setting tile to toggle sound options. Notification Policy Access (sometimes called \'Allow Modes Access\' or \'Do not Disturb Access\') permission is required for this to work.</string>
     <string name="required_permission">Required Permissions</string>
     <string name="notification_policy_access">Notification Policy Access</string>
     <string name="notification_policy_access_permission_title">Notification Policy Access Permission Required</string>
     <string name="notification_policy_access_permission_description">Application needs Notification Policy Access (\'Allow Modes Access\'/\'Do not Disturb Access\') to mute all sounds on your device.</string>
+    <string name="toast_notification_policy_access">Enable Notification Policy Access!</string>
     <string name="enable">Enable</string>
     <string name="enabled">Enabled</string>
     <string name="agree">Agree</string>

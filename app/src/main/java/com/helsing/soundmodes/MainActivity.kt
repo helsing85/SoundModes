@@ -3,6 +3,7 @@ package com.helsing.soundmodes
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -24,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -102,6 +104,7 @@ private fun AppBar(
 fun MainColumn(modifier: Modifier = Modifier) {
     val isPreview = LocalInspectionMode.current
     val context = LocalContext.current
+    val activity = context as? ComponentActivity
 
     var showDialog by remember { mutableStateOf(false) }
 
@@ -114,17 +117,32 @@ fun MainColumn(modifier: Modifier = Modifier) {
     }
 
     if (!isPreview) {
+        LaunchedEffect(Unit) {
+            val key = context.getString(R.string.toast_name_permission)
+            activity?.intent?.let { intent ->
+                if (intent.getBooleanExtra(key, false)) {
+                    Toast.makeText(
+                        context,
+                        R.string.toast_notification_policy_access,
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    // To make sure Toast is displayed only one it must be removed
+                    intent.removeExtra(key)
+                }
+            }
+        }
+
         DisposableEffect(Unit) {
-            val activity = context as ComponentActivity
             val observer = LifecycleEventObserver { _, event ->
                 if (event == Lifecycle.Event.ON_RESUME) {
                     isNotificationPolicyAccessGranted =
                         isNotificationPolicyAccessPermissionEnabled(context)
                 }
             }
-            activity.lifecycle.addObserver(observer)
+            activity?.lifecycle?.addObserver(observer)
             onDispose {
-                activity.lifecycle.removeObserver(observer)
+                activity?.lifecycle?.removeObserver(observer)
             }
         }
     }
