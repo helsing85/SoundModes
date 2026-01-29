@@ -1,7 +1,5 @@
 package com.helsing.soundmodes
 
-import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
@@ -213,11 +211,3 @@ fun MainColumn(isPreview: Boolean, modifier: Modifier = Modifier) {
     }
 }
 
-fun isNotificationPolicyAccessPermissionEnabled(context: Context, isPreview: Boolean): Boolean {
-    if (isPreview) {
-        return true
-    } else {
-        val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        return nm.isNotificationPolicyAccessGranted()
-    }
-}
