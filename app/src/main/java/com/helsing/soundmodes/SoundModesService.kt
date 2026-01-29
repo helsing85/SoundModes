@@ -2,6 +2,9 @@ package com.helsing.soundmodes
 
 import android.graphics.drawable.Icon
 import android.media.AudioManager
+import android.os.VibrationAttributes
+import android.os.VibrationEffect
+import android.os.VibratorManager
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 
@@ -10,6 +13,20 @@ class SoundModesService : TileService() {
 
     private val audioManager by lazy {
         getSystemService(AUDIO_SERVICE) as AudioManager
+    }
+
+    private fun vibrate() {
+        val vibratorManager = getSystemService(VIBRATOR_MANAGER_SERVICE) as VibratorManager
+        val vibrator = vibratorManager.defaultVibrator
+
+        val effect = VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE)
+
+        vibrator.vibrate(
+            effect,
+            VibrationAttributes.Builder()
+                .setUsage(VibrationAttributes.USAGE_NOTIFICATION)
+                .build()
+        )
     }
 
     private fun setIcon(): Int {
@@ -48,7 +65,7 @@ class SoundModesService : TileService() {
 
         if (nextMode != currentMode) {
             if (nextMode == AudioManager.RINGER_MODE_VIBRATE) {
-                //vibrate()
+                vibrate()
             }
 
             if (currentMode == AudioManager.RINGER_MODE_SILENT) {
@@ -58,10 +75,9 @@ class SoundModesService : TileService() {
             if (nextMode == AudioManager.RINGER_MODE_SILENT) {
                 //toggleZenMode(getResources().getString(R.string.silent_mode), true)
             } else {
-                //audioManager.setRingerMode(nextMode)
+                audioManager.setRingerMode(nextMode)
             }
         }
-        audioManager.setRingerMode(nextMode)
     }
 
     private fun getNextMode(
@@ -85,6 +101,7 @@ class SoundModesService : TileService() {
         }
         return currentMode
     }
+
 
     override fun onStartListening() {
         super.onStartListening()
