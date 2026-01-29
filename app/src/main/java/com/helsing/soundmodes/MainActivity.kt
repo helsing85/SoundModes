@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -54,12 +55,12 @@ class MainActivity : ComponentActivity() {
 )
 @Composable
 fun MainAppPreview() {
-    AppMainView(true)
+    AppMainView()
 
 }
 
 @Composable
-fun AppMainView(isPreview: Boolean = false) {
+fun AppMainView() {
     SoundModesTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -68,8 +69,7 @@ fun AppMainView(isPreview: Boolean = false) {
             }
         ) { contentPadding ->
             MainColumn(
-                isPreview = isPreview,
-                modifier = Modifier.padding(contentPadding)
+                modifier = Modifier.padding(contentPadding),
             )
         }
     }
@@ -99,26 +99,33 @@ private fun AppBar(
 
 
 @Composable
-fun MainColumn(isPreview: Boolean, modifier: Modifier = Modifier) {
+fun MainColumn(modifier: Modifier = Modifier) {
+    val isPreview = LocalInspectionMode.current
     val context = LocalContext.current
 
     var showDialog by remember { mutableStateOf(false) }
 
     var isNotificationPolicyAccessGranted by remember {
-        mutableStateOf(isNotificationPolicyAccessPermissionEnabled(context, isPreview))
+        if (isPreview) {
+            mutableStateOf(true)
+        } else {
+            mutableStateOf(isNotificationPolicyAccessPermissionEnabled(context))
+        }
     }
 
-    DisposableEffect(Unit) {
-        val activity = context as ComponentActivity
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                isNotificationPolicyAccessGranted =
-                    isNotificationPolicyAccessPermissionEnabled(context, isPreview)
+    if (!isPreview) {
+        DisposableEffect(Unit) {
+            val activity = context as ComponentActivity
+            val observer = LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_RESUME) {
+                    isNotificationPolicyAccessGranted =
+                        isNotificationPolicyAccessPermissionEnabled(context)
+                }
             }
-        }
-        activity.lifecycle.addObserver(observer)
-        onDispose {
-            activity.lifecycle.removeObserver(observer)
+            activity.lifecycle.addObserver(observer)
+            onDispose {
+                activity.lifecycle.removeObserver(observer)
+            }
         }
     }
 
