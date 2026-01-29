@@ -8,6 +8,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,6 +21,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -34,11 +38,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import com.helsing.soundmodes.ui.theme.SoundModesTheme
 
 
@@ -82,23 +89,74 @@ fun AppMainView() {
 private fun AppBar(
     modifier: Modifier = Modifier
 ) {
+    val uriHandler = LocalUriHandler.current
+    val context = LocalContext.current
+    val githubRepoUrl = stringResource(R.string.github_repo_link)
+
+    var secretClickCount = 0
+
+    DisposableEffect(context) {
+        val lifecycleOwner = context as? LifecycleOwner
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_PAUSE) {
+                secretClickCount = 0
+            }
+        }
+
+        lifecycleOwner?.lifecycle?.addObserver(observer)
+        onDispose {
+            lifecycleOwner?.lifecycle?.removeObserver(observer)
+        }
+    }
+
     Row(
         modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primary)
-            .padding(top = 40.dp, bottom = 8.dp),
+            .padding(top = 40.dp, bottom = 8.dp, end = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = stringResource(R.string.app_name),
-            modifier = Modifier.padding(start = 16.dp),
+            modifier = Modifier
+                .padding(start = 16.dp)
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {
+                    secretClickCount++
+
+                    if (secretClickCount >= 7) {
+                        context.startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS))
+                        secretClickCount = 0
+                    }
+                },
             color = MaterialTheme.colorScheme.onPrimary,
             style = MaterialTheme.typography.headlineLarge,
-        )
+
+            )
+
+        IconButton(
+            onClick = {
+                secretClickCount++
+
+                if (secretClickCount >= 7) {
+                    secretClickCount = 0
+                    context.startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS))
+                } else {
+                    uriHandler.openUri(githubRepoUrl)
+                }
+            }
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.github_logo),
+                contentDescription = "GitHub",
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
+        }
     }
 }
-
 
 @Composable
 fun MainColumn(modifier: Modifier = Modifier) {
@@ -117,7 +175,7 @@ fun MainColumn(modifier: Modifier = Modifier) {
     }
 
     if (!isPreview) {
-        LaunchedEffect(Unit) {
+        LaunchedEffect(context) {
             val key = context.getString(R.string.toast_name_permission)
             activity?.intent?.let { intent ->
                 if (intent.getBooleanExtra(key, false)) {
@@ -133,7 +191,7 @@ fun MainColumn(modifier: Modifier = Modifier) {
             }
         }
 
-        DisposableEffect(Unit) {
+        DisposableEffect(context) {
             val observer = LifecycleEventObserver { _, event ->
                 if (event == Lifecycle.Event.ON_RESUME) {
                     isNotificationPolicyAccessGranted =
