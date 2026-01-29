@@ -120,7 +120,7 @@ class SoundModesService : TileService() {
         }
     }
 
-    fun clickTile() {
+    fun changeSoundMode() {
         val currentMode: Int = audioManager.ringerMode
 
         val nextMode: Int = getNextMode(currentMode)
@@ -172,7 +172,7 @@ class SoundModesService : TileService() {
 
     override fun onClick() {
         super.onClick()
-        clickTile()
+        changeSoundMode()
         updateTile()
     }
 
