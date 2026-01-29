@@ -113,14 +113,14 @@ private fun AppBar(
         modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primary)
-            .padding(top = 40.dp, bottom = 8.dp, end = 8.dp),
+            .padding(top = 40.dp, bottom = 8.dp, start = 8.dp, end = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = stringResource(R.string.app_name),
             modifier = Modifier
-                .padding(start = 16.dp)
+                .padding(start = 8.dp)
                 .clickable(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }
@@ -151,7 +151,7 @@ private fun AppBar(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.github_logo),
-                contentDescription = "GitHub",
+                contentDescription = stringResource(R.string.github_logo_description),
                 tint = MaterialTheme.colorScheme.onPrimary
             )
         }

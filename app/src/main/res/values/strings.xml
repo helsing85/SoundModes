@@ -21,4 +21,5 @@
     <string name="silent_mode_description">Silent Mode / Sound Modes</string>
     <string name="silent_mode_active">Silent Mode Active</string>
     <string name="silent_mode_inactive">Silent Mode Inactive</string>
+    <string name="github_logo_description">GitHub Icon</string>
 </resources>
