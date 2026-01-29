@@ -14,4 +14,8 @@
     <string name="silent">Silent</string>
     <string name="unknown">Unknown</string>
     <string name="silent_mode">Silent Mode</string>
+    <string name="zen_rule_condition_uri" translatable="false">condition://com.helsing.soundmodes/silent_mode</string>
+    <string name="silent_mode_description">Silent Mode / Sound Modes</string>
+    <string name="silent_mode_active">Silent Mode Active</string>
+    <string name="silent_mode_inactive">Silent Mode Inactive</string>
 </resources>
