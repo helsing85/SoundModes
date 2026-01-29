@@ -72,7 +72,7 @@ class SoundModesService : TileService() {
         return notificationManager.addAutomaticZenRule(newRule)
     }
 
-    fun toggleZenMode(ruleName: String, turnOn: Boolean) {
+    private fun toggleZenMode(ruleName: String, turnOn: Boolean) {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         val ruleId = getOrCreateZenRuleID(ruleName) ?: return
@@ -100,24 +100,26 @@ class SoundModesService : TileService() {
         )
     }
 
-    fun updateTile() {
-        val tile = qsTile ?: return
-        val ringerMode = audioManager.ringerMode
+    private fun getNextMode(
+        currentMode: Int,
+        excluded: Set<Int> = emptySet()
+    ): Int {
+        val allModes = listOf(
+            AudioManager.RINGER_MODE_NORMAL,
+            AudioManager.RINGER_MODE_VIBRATE,
+            AudioManager.RINGER_MODE_SILENT
+        )
 
-        val tileLabel = when (ringerMode) {
-            0 -> getString(R.string.silent)
-            1 -> getString(R.string.vibrate)
-            2 -> getString(R.string.normal)
-            else -> getString(R.string.unknown)
-        }
+        val currentIndex = allModes.indexOf(currentMode)
+        val size = allModes.size
 
-        tile.apply {
-            contentDescription = tileLabel
-            label = tileLabel
-            icon = Icon.createWithResource(this@SoundModesService, setIcon())
-            state = Tile.STATE_ACTIVE
-            updateTile()
+        for (i in 1..size) {
+            val nextMode = allModes[(currentIndex + i) % size]
+            if (nextMode !in excluded) {
+                return nextMode
+            }
         }
+        return currentMode
     }
 
     fun changeSoundMode() {
@@ -142,28 +144,25 @@ class SoundModesService : TileService() {
         }
     }
 
-    private fun getNextMode(
-        currentMode: Int,
-        excluded: Set<Int> = emptySet()
-    ): Int {
-        val allModes = listOf(
-            AudioManager.RINGER_MODE_NORMAL,
-            AudioManager.RINGER_MODE_VIBRATE,
-            AudioManager.RINGER_MODE_SILENT
-        )
+    fun updateTile() {
+        val tile = qsTile ?: return
+        val ringerMode = audioManager.ringerMode
 
-        val currentIndex = allModes.indexOf(currentMode)
-        val size = allModes.size
-
-        for (i in 1..size) {
-            val nextMode = allModes[(currentIndex + i) % size]
-            if (nextMode !in excluded) {
-                return nextMode
-            }
+        val tileLabel = when (ringerMode) {
+            0 -> getString(R.string.silent)
+            1 -> getString(R.string.vibrate)
+            2 -> getString(R.string.normal)
+            else -> getString(R.string.unknown)
         }
-        return currentMode
-    }
 
+        tile.apply {
+            contentDescription = tileLabel
+            label = tileLabel
+            icon = Icon.createWithResource(this@SoundModesService, setIcon())
+            state = Tile.STATE_ACTIVE
+            updateTile()
+        }
+    }
 
     override fun onStartListening() {
         super.onStartListening()
