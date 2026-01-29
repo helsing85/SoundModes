@@ -1,19 +1,29 @@
 package com.helsing.soundmodes
 
 import android.app.AutomaticZenRule
+import android.app.NotificationManager
+import android.content.BroadcastReceiver
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.drawable.Icon
 import android.media.AudioManager
 import android.os.VibrationAttributes
 import android.os.VibrationEffect
 import android.os.VibratorManager
+import android.service.notification.Condition
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
-import android.app.NotificationManager
-import android.content.ComponentName
 import androidx.core.net.toUri
-import android.service.notification.Condition
 
 class SoundModesService : TileService() {
+
+    private val broadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            updateTile()
+        }
+    }
 
 
     private val audioManager by lazy {
@@ -164,15 +174,24 @@ class SoundModesService : TileService() {
         }
     }
 
-    override fun onStartListening() {
-        super.onStartListening()
-        updateTile()
-    }
-
     override fun onClick() {
         super.onClick()
         changeSoundMode()
         updateTile()
+    }
+
+    override fun onStartListening() {
+        super.onStartListening()
+        updateTile()
+        registerReceiver(
+            broadcastReceiver,
+            IntentFilter("android.media.RINGER_MODE_CHANGED"),
+            RECEIVER_EXPORTED
+        )
+    }
+
+    override fun onStopListening() {
+        unregisterReceiver(broadcastReceiver)
     }
 
 }
