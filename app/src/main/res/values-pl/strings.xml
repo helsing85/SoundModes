@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tryby dźwięków</string>
+    <string name="description">"Aplikacja pozwala dodać kafelek w szybkich ustawienianiach aby przełączać między trybami dźwięków. Wymagany jest 'Dostęp do zasad powiadomień' (w systemie zwany jako 'Dostęp do trybów' lub 'Dostęp do funkcji Nie przeszkadzać') aby móc wyciszyć wszystkie dźwięki. "</string>
+    <string name="required_permission">Wymagane pozwolenia</string>
+    <string name="notification_policy_access">Dostęp do zasad powiadomień</string>
+    <string name="notification_policy_access_permission_title">Wymagane pozwolenie</string>
+    <string name="notification_policy_access_permission_description">Aplikacja wymaga dostępu do zasad powiadomień (\'Dostęp do trybów\'/\'Dostęp do funkcji Nie przeszkadzać\') aby wyciszyć wszystkie dźwięki na urządzeniu.</string>
+    <string name="toast_notification_policy_access">Włącz dostęp do zasad powiadomień!</string>
+    <string name="enable">Włącz</string>
+    <string name="enabled">Włączone</string>
+    <string name="agree">Zgadzam się</string>
+    <string name="not_now">Nie teraz</string>
+    <string name="normal">Normalny</string>
+    <string name="vibrate">Wibracje</string>
+    <string name="silent">Cichy</string>
+    <string name="unknown">Nienzany</string>
+    <string name="silent_mode">Tryb Cichy</string>
+    <string name="silent_mode_description">Tryb Cichy / Tryby dźwięków</string>
+    <string name="silent_mode_active">Tryb Cichy aktywny</string>
+    <string name="silent_mode_inactive">Tyb Cichy nieaktywny</string>
+    <string name="github_logo_description">Ikona GitHub</string>
+</resources>
