@@ -14,8 +14,8 @@ android {
         applicationId = "com.helsing.soundmodes"
         minSdk = 35
         targetSdk = 36
-        versionCode = 4
-        versionName = "1.0"
+        versionCode = 5
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
