@@ -10,6 +10,7 @@
     <string name="enable">Włącz</string>
     <string name="enabled">Włączone</string>
     <string name="agree">Zgadzam się</string>
+    <string name="tile_description">Szybka zmiana trybów dźwięku (Normalny, Wibracje, Cichy)</string>
     <string name="not_now">Nie teraz</string>
     <string name="normal">Normalny</string>
     <string name="vibrate">Wibracje</string>

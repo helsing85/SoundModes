@@ -3,11 +3,8 @@ package com.helsing.soundmodes
 import android.app.AutomaticZenRule
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.BroadcastReceiver
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.graphics.drawable.Icon
 import android.media.AudioManager
 import android.os.VibrationAttributes
@@ -19,13 +16,6 @@ import android.service.quicksettings.TileService
 import androidx.core.net.toUri
 
 class SoundModesService : TileService() {
-
-    private val broadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            updateTile()
-        }
-    }
-
 
     private val audioManager by lazy {
         getSystemService(AUDIO_SERVICE) as AudioManager
@@ -140,7 +130,6 @@ class SoundModesService : TileService() {
                 putExtra(resources.getString(R.string.toast_name_permission), true)
             }
 
-            // PendingIntent required for Androida 14+
             val pendingIntent = PendingIntent.getActivity(
                 this,
                 0,
@@ -194,23 +183,16 @@ class SoundModesService : TileService() {
     }
 
     override fun onClick() {
-        super.onClick()
         changeSoundMode()
         updateTile()
     }
 
     override fun onStartListening() {
-        super.onStartListening()
         updateTile()
-        registerReceiver(
-            broadcastReceiver,
-            IntentFilter("android.media.RINGER_MODE_CHANGED"),
-            RECEIVER_EXPORTED
-        )
     }
 
     override fun onStopListening() {
-        unregisterReceiver(broadcastReceiver)
+
     }
 
 }

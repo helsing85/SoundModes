@@ -12,6 +12,7 @@
     <string name="enable">Enable</string>
     <string name="enabled">Enabled</string>
     <string name="agree">Agree</string>
+    <string name="tile_description">Quickly cycle between sound modes (Normal, Vibrate, Silent)</string>
     <string name="not_now">Not now</string>
     <string name="normal">Normal</string>
     <string name="vibrate">Vibrate</string>
