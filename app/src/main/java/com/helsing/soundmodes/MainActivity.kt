@@ -162,6 +162,7 @@ private fun AppBar(
 fun MainColumn(modifier: Modifier = Modifier) {
     val isPreview = LocalInspectionMode.current
     val context = LocalContext.current
+    val manager by lazy { SoundModesManager(context) }
     val activity = context as? ComponentActivity
 
     var showDialog by remember { mutableStateOf(false) }
@@ -170,7 +171,7 @@ fun MainColumn(modifier: Modifier = Modifier) {
         if (isPreview) {
             mutableStateOf(true)
         } else {
-            mutableStateOf(isNotificationPolicyAccessPermissionEnabled(context))
+            mutableStateOf(manager.isNotificationPolicyAccessPermissionEnabled(context))
         }
     }
 
@@ -195,7 +196,7 @@ fun MainColumn(modifier: Modifier = Modifier) {
             val observer = LifecycleEventObserver { _, event ->
                 if (event == Lifecycle.Event.ON_RESUME) {
                     isNotificationPolicyAccessGranted =
-                        isNotificationPolicyAccessPermissionEnabled(context)
+                        manager.isNotificationPolicyAccessPermissionEnabled(context)
                 }
             }
             activity?.lifecycle?.addObserver(observer)
