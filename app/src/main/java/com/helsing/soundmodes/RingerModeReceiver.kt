@@ -14,6 +14,8 @@ class RingerModeReceiver : BroadcastReceiver() {
                 context,
                 ComponentName(context, SoundModesService::class.java)
             )
+
+            SoundModesWidget.updateAllWidgets(context)
         }
     }
 }
