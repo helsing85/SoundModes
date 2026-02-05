@@ -13,17 +13,17 @@ class SoundModesClassicWidget : AppWidgetProvider() {
     companion object {
         const val WIDGET_TOGGLE_MODE = "com.helsing.soundmodes.WIDGET_TOGGLE_MODE"
 
-        fun updateAllWidgets(context: Context) {
+        fun updateAllClassicWidgets(context: Context) {
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val thisWidget = ComponentName(context, SoundModesClassicWidget::class.java)
             val appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget)
 
             for (appWidgetId in appWidgetIds) {
-                updateAppWidget(context, appWidgetManager, appWidgetId)
+                updateClassicWidget(context, appWidgetManager, appWidgetId)
             }
         }
 
-        fun updateAppWidget(
+        fun updateClassicWidget(
             context: Context,
             appWidgetManager: AppWidgetManager,
             appWidgetId: Int
@@ -52,7 +52,7 @@ class SoundModesClassicWidget : AppWidgetProvider() {
         appWidgetIds: IntArray
     ) {
         for (appWidgetId in appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId)
+            updateClassicWidget(context, appWidgetManager, appWidgetId)
         }
     }
 
