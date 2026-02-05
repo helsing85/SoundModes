@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/widget_glance_toggle_description"
+    android:initialLayout="@layout/sound_modes_glance_widget_layout"
     android:minWidth="40dp"
     android:minHeight="40dp"
     android:previewLayout="@layout/sound_modes_glance_widget_layout"
+    android:resizeMode="horizontal|vertical"
     android:targetCellWidth="1"
     android:targetCellHeight="1"
     android:updatePeriodMillis="0"
