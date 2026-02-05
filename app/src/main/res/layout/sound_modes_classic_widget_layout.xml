@@ -7,4 +7,5 @@
     android:contentDescription="@string/app_name"
     android:padding="8dp"
     android:scaleType="fitCenter"
-    android:src="@drawable/volume_up" />
+    android:src="@drawable/volume_up"
+    android:tint="?android:attr/colorAccent" />

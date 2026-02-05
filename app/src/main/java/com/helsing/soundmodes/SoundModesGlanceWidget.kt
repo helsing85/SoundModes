@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.Preferences
+import androidx.glance.ColorFilter
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
+import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
@@ -42,18 +44,21 @@ class SoundModesGlanceWidget : GlanceAppWidget() {
         val context = LocalContext.current
         val description = context.getString(R.string.app_name)
 
-        Box(
-            modifier = GlanceModifier
-                .fillMaxSize()
-                .padding(8.dp)
-                .clickable(actionRunCallback<ToggleModeAction>()),
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                provider = ImageProvider(iconRes),
-                contentDescription = description,
-                modifier = GlanceModifier.fillMaxSize()
-            )
+        GlanceTheme {
+            Box(
+                modifier = GlanceModifier
+                    .fillMaxSize()
+                    .padding(8.dp)
+                    .clickable(actionRunCallback<ToggleModeAction>()),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    provider = ImageProvider(iconRes),
+                    contentDescription = description,
+                    modifier = GlanceModifier.fillMaxSize(),
+                    colorFilter = ColorFilter.tint(GlanceTheme.colors.primary)
+                )
+            }
         }
     }
 
