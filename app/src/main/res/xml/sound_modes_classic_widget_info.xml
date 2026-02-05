@@ -2,8 +2,8 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="40dp"
     android:minHeight="40dp"
-    android:initialLayout="@layout/sound_modes_widget_layout"
+    android:initialLayout="@layout/sound_modes_classic_widget_layout"
     android:updatePeriodMillis="0"
     android:widgetCategory="home_screen"
-    android:previewLayout="@layout/sound_modes_widget_layout">
+    android:previewLayout="@layout/sound_modes_classic_widget_layout">
 </appwidget-provider>
