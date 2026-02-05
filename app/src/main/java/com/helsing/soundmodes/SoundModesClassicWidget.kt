@@ -11,6 +11,8 @@ import android.widget.RemoteViews
 class SoundModesClassicWidget : AppWidgetProvider() {
 
     companion object {
+
+        // The same action name must be present in AndroidManifest.xml for this receiver
         const val WIDGET_TOGGLE_MODE = "com.helsing.soundmodes.WIDGET_TOGGLE_MODE"
 
         fun updateAllClassicWidgets(context: Context) {
