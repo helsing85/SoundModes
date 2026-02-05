@@ -16,6 +16,8 @@ class RingerModeReceiver : BroadcastReceiver() {
             )
 
             SoundModesWidget.updateAllWidgets(context)
+
+            SoundModesGlanceWidgetReceiver.updateAllGlanceWidgets(context)
         }
     }
 }
