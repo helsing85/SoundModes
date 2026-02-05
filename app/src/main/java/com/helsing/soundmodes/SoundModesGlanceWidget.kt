@@ -57,10 +57,11 @@ class SoundModesGlanceWidget : GlanceAppWidget() {
         }
     }
 
+    @Suppress("unused")
     @OptIn(ExperimentalGlancePreviewApi::class)
     @Preview
     @Composable
-    fun SoundModeWidgetPreview() {
+    fun SoundModesGlanceWidgetPreview() {
         MyWidgetContent(R.drawable.volume_off)
     }
 
