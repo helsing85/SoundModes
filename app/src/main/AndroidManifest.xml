@@ -37,7 +37,7 @@
                 android:value="true" />
         </service>
         <receiver
-            android:name=".widgets.SoundModesClassicWidget"
+            android:name=".widgets.ToggleAllWidgetClassic"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -45,7 +45,7 @@
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/sound_modes_classic_widget_info" />
+                android:resource="@xml/widget_classic_toggle_all_info" />
         </receiver>
         <receiver android:name=".widgets.SoundModesGlanceWidgetReceiver"
             android:exported="true">

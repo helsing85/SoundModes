@@ -10,7 +10,7 @@ import android.widget.RemoteViews
 import com.helsing.soundmodes.R
 import com.helsing.soundmodes.SoundModesManager
 
-class SoundModesClassicWidget : AppWidgetProvider() {
+class ToggleAllWidgetClassic : AppWidgetProvider() {
 
     companion object {
 
@@ -19,7 +19,7 @@ class SoundModesClassicWidget : AppWidgetProvider() {
 
         fun updateAllClassicWidgets(context: Context) {
             val appWidgetManager = AppWidgetManager.getInstance(context)
-            val thisWidget = ComponentName(context, SoundModesClassicWidget::class.java)
+            val thisWidget = ComponentName(context, ToggleAllWidgetClassic::class.java)
             val appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget)
 
             for (appWidgetId in appWidgetIds) {
@@ -33,10 +33,10 @@ class SoundModesClassicWidget : AppWidgetProvider() {
             appWidgetId: Int
         ) {
             val iconRes = SoundModesManager(context).getModeIcon()
-            val views = RemoteViews(context.packageName, R.layout.sound_modes_classic_widget_layout)
+            val views = RemoteViews(context.packageName, R.layout.widget_classic_toggle_all_layout)
             views.setImageViewResource(R.id.widget_button, iconRes)
 
-            val intent = Intent(context, SoundModesClassicWidget::class.java).apply {
+            val intent = Intent(context, ToggleAllWidgetClassic::class.java).apply {
                 action = WIDGET_TOGGLE_MODE
             }
 

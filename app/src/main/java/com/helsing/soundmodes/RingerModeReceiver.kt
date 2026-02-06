@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.service.quicksettings.TileService
-import com.helsing.soundmodes.widgets.SoundModesClassicWidget
+import com.helsing.soundmodes.widgets.ToggleAllWidgetClassic
 import com.helsing.soundmodes.widgets.SoundModesGlanceWidgetReceiver
 
 class RingerModeReceiver : BroadcastReceiver() {
@@ -17,7 +17,7 @@ class RingerModeReceiver : BroadcastReceiver() {
                 ComponentName(context, SoundModesService::class.java)
             )
 
-            SoundModesClassicWidget.updateAllClassicWidgets(context)
+            ToggleAllWidgetClassic.updateAllClassicWidgets(context)
 
             SoundModesGlanceWidgetReceiver.updateAllGlanceWidgets(context)
         }
