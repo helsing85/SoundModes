@@ -176,8 +176,8 @@ fun MainColumn(modifier: Modifier = Modifier) {
     }
 
     if (!isPreview) {
+        val key = stringResource(R.string.toast_name_permission)
         LaunchedEffect(context) {
-            val key = context.getString(R.string.toast_name_permission)
             activity?.intent?.let { intent ->
                 if (intent.getBooleanExtra(key, false)) {
                     Toast.makeText(
