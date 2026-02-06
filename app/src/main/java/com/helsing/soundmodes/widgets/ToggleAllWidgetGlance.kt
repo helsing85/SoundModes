@@ -30,7 +30,7 @@ import androidx.glance.state.PreferencesGlanceStateDefinition
 import com.helsing.soundmodes.R
 import com.helsing.soundmodes.SoundModesManager
 
-class SoundModesGlanceWidget : GlanceAppWidget() {
+class ToggleAllWidgetGlance : GlanceAppWidget() {
     override var stateDefinition = PreferencesGlanceStateDefinition
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {

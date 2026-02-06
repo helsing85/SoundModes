@@ -47,14 +47,14 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_classic_toggle_all_info" />
         </receiver>
-        <receiver android:name=".widgets.SoundModesGlanceWidgetReceiver"
+        <receiver android:name=".widgets.ToggleAllWidgetGlanceReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/sound_modes_glance_widget_info" />
+                android:resource="@xml/widget_glance_toggle_all_info" />
         </receiver>
 
     </application>
