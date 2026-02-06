@@ -12,8 +12,10 @@ This project was inspired by the [Sound-Toggle](https://github.com/grmasa/Sound-
 
 ## ✨ Features
 - **Quick Settings Tile:** Cycle through Sound, Vibrate, and Mute with one tap.
+
   ![Normal Mode](img/normal.png) ![Vibrate Mode](img/vibrate.png) ![Silent Mode](img/silent.png)
-- **Widget:** Toggle between modes directly from your home screen. Widget build using Jetpack Glance and with adaptive colors. 
+- **Widget:** Toggle between modes directly from your home screen. Widget build using Jetpack Glance and with adaptive colors.
+
   ![Light Mode](img/widget_light.png) ![Dark Mode](img/widget_dark.png)
 - **Android 15 (API 35) Optimized:** Specifically designed for the latest Android versions.
 - **Multilingual:** Full support for **English** and **Polish**.
