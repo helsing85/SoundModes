@@ -224,8 +224,8 @@ fun MainColumn(modifier: Modifier = Modifier) {
             )
             {
                 Text(
-                    text = stringResource(R.string.description),
-                    style = MaterialTheme.typography.bodyLarge
+                    text = stringResource(R.string.app_description),
+                    style = MaterialTheme.typography.titleMedium
                 )
             }
         }
@@ -241,7 +241,10 @@ fun MainColumn(modifier: Modifier = Modifier) {
                     stringResource(R.string.required_permission),
                     style = MaterialTheme.typography.titleMedium
                 )
-
+                Text(
+                    text = stringResource(R.string.required_permission_description),
+                    style = MaterialTheme.typography.bodyLarge
+                )
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),

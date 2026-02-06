@@ -3,7 +3,8 @@
     <string name="github_repo_link" translatable="false">https://github.com/helsing85/SoundModes</string>
     <string name="zen_rule_condition_uri" translatable="false">condition://com.helsing.soundmodes/silent_mode</string>
     <string name="toast_name_permission" translatable="false">SHOW_PERMISSION_TOAST</string>
-    <string name="description">With this app, you can create an Android quick setting tile to toggle sound options. Notification Policy Access (called as \'Allow Modes Access\' or \'Do not Disturb Access\') permission is required for this to work.</string>
+    <string name="app_description">Toggle between Silent, Vibrate, and Normal modes using a quick settings Tile or a home screen Widget.</string>
+    <string name="required_permission_description">"Android restricts direct muting of all sounds to the physical buttons and the system volume menu. To enable full silent mode, the Notification Policy Access permission (known as 'Allow Modes Access' or 'Do Not Disturb Access') is required."</string>
     <string name="required_permission">Required Permissions</string>
     <string name="notification_policy_access">Notification Policy Access</string>
     <string name="notification_policy_access_permission_title">Notification Policy Access Permission Required</string>
