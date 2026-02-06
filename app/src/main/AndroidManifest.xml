@@ -36,17 +36,6 @@
                 android:name="android.service.quicksettings.ACTIVE_TILE"
                 android:value="true" />
         </service>
-        <receiver
-            android:name=".widgets.ToggleAllWidgetClassic"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.helsing.soundmodes.widgets.TOGGLE_ALL_MODES" />
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_classic_toggle_all_info" />
-        </receiver>
         <receiver android:name=".widgets.ToggleAllWidgetGlanceReceiver"
             android:exported="true">
             <intent-filter>

@@ -24,7 +24,5 @@
     <string name="silent_mode_inactive">Silent Mode Inactive</string>
     <string name="github_logo_description">GitHub Icon</string>
     <string name="widget_glance">Glance Widget</string>
-    <string name="widget_classic">Classic Widget</string>
-    <string name="widget_glance_toggle_description">Toggle between all modes (Glance)</string>
-    <string name="widget_classic_toggle_description">Toggle between all modes (Classic)</string>
+    <string name="widget_glance_toggle_description">Toggle between all modes</string>
 </resources>
