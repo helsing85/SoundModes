@@ -23,6 +23,4 @@
     <string name="github_logo_description">Ikona GitHub</string>
     <string name="widget_glance_toggle_description">Przłączaj między wszystkimi trybami (Glance)</string>
     <string name="widget_glance">Widżet Glance</string>
-    <string name="widget_classic">"Klasyczny Widżet "</string>
-    <string name="widget_classic_toggle_description">Przłączaj między wszystkimi trybami (Klasyczny)</string>
 </resources>
