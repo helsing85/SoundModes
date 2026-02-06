@@ -1,4 +1,4 @@
-package com.helsing.soundmodes
+package com.helsing.soundmodes.widgets
 
 import android.content.Context
 import androidx.datastore.preferences.core.longPreferencesKey

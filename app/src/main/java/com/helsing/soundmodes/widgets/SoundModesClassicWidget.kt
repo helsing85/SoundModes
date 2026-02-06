@@ -1,4 +1,4 @@
-package com.helsing.soundmodes
+package com.helsing.soundmodes.widgets
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -7,13 +7,15 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
+import com.helsing.soundmodes.R
+import com.helsing.soundmodes.SoundModesManager
 
 class SoundModesClassicWidget : AppWidgetProvider() {
 
     companion object {
 
         // The same action name must be present in AndroidManifest.xml for this receiver
-        const val WIDGET_TOGGLE_MODE = "com.helsing.soundmodes.WIDGET_TOGGLE_MODE"
+        const val WIDGET_TOGGLE_MODE = "com.helsing.soundmodes.widgets.TOGGLE_ALL_MODES"
 
         fun updateAllClassicWidgets(context: Context) {
             val appWidgetManager = AppWidgetManager.getInstance(context)

@@ -1,6 +1,7 @@
-package com.helsing.soundmodes
+package com.helsing.soundmodes.widgets
 
 import android.content.Context
+import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.Preferences
@@ -26,6 +27,8 @@ import androidx.glance.layout.padding
 import androidx.glance.preview.ExperimentalGlancePreviewApi
 import androidx.glance.preview.Preview
 import androidx.glance.state.PreferencesGlanceStateDefinition
+import com.helsing.soundmodes.R
+import com.helsing.soundmodes.SoundModesManager
 
 class SoundModesGlanceWidget : GlanceAppWidget() {
     override var stateDefinition = PreferencesGlanceStateDefinition
@@ -80,7 +83,7 @@ class ToggleModeAction : ActionCallback {
         parameters: ActionParameters
     ) {
         SoundModesManager(context).changeSoundMode { intent ->
-            intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }
     }

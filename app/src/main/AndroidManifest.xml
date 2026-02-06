@@ -37,17 +37,17 @@
                 android:value="true" />
         </service>
         <receiver
-            android:name=".SoundModesClassicWidget"
+            android:name=".widgets.SoundModesClassicWidget"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.helsing.soundmodes.WIDGET_TOGGLE_MODE" />
+                <action android:name="com.helsing.soundmodes.widgets.TOGGLE_ALL_MODES" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/sound_modes_classic_widget_info" />
         </receiver>
-        <receiver android:name=".SoundModesGlanceWidgetReceiver"
+        <receiver android:name=".widgets.SoundModesGlanceWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

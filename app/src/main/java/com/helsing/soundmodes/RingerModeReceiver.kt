@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.service.quicksettings.TileService
+import com.helsing.soundmodes.widgets.SoundModesClassicWidget
+import com.helsing.soundmodes.widgets.SoundModesGlanceWidgetReceiver
 
 class RingerModeReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
