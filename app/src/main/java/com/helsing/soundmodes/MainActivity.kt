@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
@@ -117,25 +118,34 @@ private fun AppBar(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(
-            text = stringResource(R.string.app_name),
-            modifier = Modifier
-                .padding(start = 8.dp)
-                .clickable(
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() }
-                ) {
-                    secretClickCount++
-
-                    if (secretClickCount >= 7) {
-                        context.startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS))
-                        secretClickCount = 0
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.app_icon),
+                contentDescription = stringResource(R.string.app_logo_description),
+                tint = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier
+                    .size(38.dp)
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        secretClickCount++
+                        if (secretClickCount >= 7) {
+                            context.startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS))
+                            secretClickCount = 0
+                        }
                     }
-                },
-            color = MaterialTheme.colorScheme.onPrimary,
-            style = MaterialTheme.typography.headlineLarge,
-
             )
+            Text(
+                text = stringResource(R.string.app_name),
+                modifier = Modifier
+                    .padding(start = 4.dp),
+                color = MaterialTheme.colorScheme.onPrimary,
+                style = MaterialTheme.typography.headlineLarge,
+            )
+        }
 
         IconButton(
             onClick = {

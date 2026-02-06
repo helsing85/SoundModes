@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Tryby dźwięków</string>
     <string name="app_description">Przełączaj tryby dźwięku (Cichy, Wibracje, Normalny) za pomocą Kafelka w szybkich ustawieniach lub Widżetu na ekranie głównym.</string>
+    <string name="app_logo_description">Ikona aplikacji</string>
     <string name="required_permission_description">System Android ogranicza możliwość bezpośredniego wyciszania wszystkich dźwięków wyłącznie do przycisków fizycznych oraz menu głośności. Aby aplikacja mogła aktywować pełny tryb cichy, wymagane jest nadanie uprawnienia Dostęp do zasad powiadomień (często nazywanego \'Dostęp do trybów\' lub \'Dostęp do funkcji Nie przeszkadzać\').</string>
     <string name="required_permission">Wymagane pozwolenia</string>
     <string name="notification_policy_access">Dostęp do zasad powiadomień</string>
