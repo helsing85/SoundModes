@@ -14,8 +14,8 @@ android {
         applicationId = "com.helsing.soundmodes"
         minSdk = 35
         targetSdk = 36
-        versionCode = 5
-        versionName = "1.1"
+        versionCode = 8
+        versionName = "1.4-beta"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -54,6 +54,13 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.material3)
     implementation(libs.ads.mobile.sdk)
+    implementation(libs.androidx.glance)
+    implementation(libs.androidx.glance.preview)
+    implementation(libs.androidx.glance.appwidget)
+    implementation(libs.androidx.glance.appwidget.preview)
+    implementation(libs.androidx.glance.material3)
+    debugImplementation(libs.androidx.ui.tooling)
+    implementation(libs.kotlinx.coroutines.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

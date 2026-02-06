@@ -36,6 +36,16 @@
                 android:name="android.service.quicksettings.ACTIVE_TILE"
                 android:value="true" />
         </service>
+        <receiver android:name=".widgets.ToggleAllWidgetGlanceReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_glance_toggle_all_info" />
+        </receiver>
+
     </application>
 
 </manifest>
