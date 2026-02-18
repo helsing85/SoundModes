@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".SoundModesApp"
@@ -44,6 +45,16 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_glance_toggle_all_info" />
+        </receiver>
+        <receiver
+            android:name=".RingerModeReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+                <action android:name="android.media.RINGER_MODE_CHANGED" />
+            </intent-filter>
         </receiver>
 
     </application>
