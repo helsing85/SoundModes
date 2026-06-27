@@ -3,6 +3,8 @@
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
     <application
         android:name=".SoundModesApp"
@@ -37,6 +39,13 @@
                 android:name="android.service.quicksettings.ACTIVE_TILE"
                 android:value="true" />
         </service>
+        <service
+            android:name=".SoundChangeForegroundService"
+            android:foregroundServiceType="specialUse"
+            android:exported="false">
+            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="System audio toggle from widget/tile" />
+        </service>
         <receiver android:name=".widgets.ToggleAllWidgetGlanceReceiver"
             android:exported="true">
             <intent-filter>
@@ -53,7 +62,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
-                <action android:name="android.media.RINGER_MODE_CHANGED" />
             </intent-filter>
         </receiver>
 
