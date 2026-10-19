@@ -4,7 +4,6 @@ import android.app.AutomaticZenRule
 import android.app.NotificationManager
 import android.content.ComponentName
 import android.content.Context
-import android.content.Context.VIBRATOR_MANAGER_SERVICE
 import android.content.Intent
 import android.media.AudioManager
 import android.os.VibrationAttributes
@@ -13,16 +12,37 @@ import android.os.VibratorManager
 import android.service.notification.Condition
 import androidx.core.net.toUri
 
+/**
+ * Returns the ringer mode which follows [currentMode] in the cycle Normal -> Vibrate -> Silent,
+ * skipping [excluded] modes.
+ */
+internal fun nextRingerMode(currentMode: Int, excluded: Set<Int> = emptySet()): Int {
+    val allModes = listOf(
+        AudioManager.RINGER_MODE_NORMAL,
+        AudioManager.RINGER_MODE_VIBRATE,
+        AudioManager.RINGER_MODE_SILENT
+    )
+
+    val currentIndex = allModes.indexOf(currentMode)
+    val size = allModes.size
+
+    for (i in 1..size) {
+        val nextMode = allModes[(currentIndex + i) % size]
+        if (nextMode !in excluded) {
+            return nextMode
+        }
+    }
+    return currentMode
+}
+
 class SoundModesManager(private val context: Context) {
 
-    private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    private val notificationManager =
-        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    private val audioManager = context.getSystemService(AudioManager::class.java)
+    private val notificationManager = context.getSystemService(NotificationManager::class.java)
     private val conditionUri = context.getString(R.string.zen_rule_condition_uri).toUri()
 
     private fun vibrate() {
-        val vibratorManager = context.getSystemService(VIBRATOR_MANAGER_SERVICE) as VibratorManager
-        val vibrator = vibratorManager.defaultVibrator
+        val vibrator = context.getSystemService(VibratorManager::class.java).defaultVibrator
         val effect = VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE)
 
         vibrator.vibrate(
@@ -33,29 +53,41 @@ class SoundModesManager(private val context: Context) {
         )
     }
 
-    private fun getOrCreateZenRuleID(ruleName: String): String? {
-        val existingRules = notificationManager.automaticZenRules
-        val existingId = existingRules.entries.firstOrNull { it.value.name == ruleName }?.key
-        if (existingId != null) return existingId
+    private fun getOrCreateZenRuleID(): String? {
+        // The rule is identified by its condition URI, because its name is translated
+        // and changes together with the device language
+        val existingIds = notificationManager.automaticZenRules.entries
+            .filter { it.value.conditionId == conditionUri }
+            .map { it.key }
 
+        if (existingIds.isNotEmpty()) {
+            // Older versions found the rule by name and could create duplicates
+            // after a language change
+            existingIds.drop(1).forEach { notificationManager.removeAutomaticZenRule(it) }
+            return existingIds.first()
+        }
+
+        val ruleName = context.getString(R.string.silent_mode)
         val iconResId = R.drawable.volume_off
         val description = context.getString(R.string.silent_mode_description)
         val configActivity = ComponentName(context.packageName, MainActivity::class.java.name)
 
         val newRule = AutomaticZenRule.Builder(ruleName, conditionUri)
+            .setType(AutomaticZenRule.TYPE_OTHER)
             .setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALARMS)
             // .setZenPolicy(zenPolicy)  // ZenPolicy is not needed when INTERRUPTION_FILTER_ALARMS
             .setIconResId(iconResId)
             .setTriggerDescription(description)
             .setConfigurationActivity(configActivity)
+            .setManualInvocationAllowed(true)
             .setEnabled(true)
             .build()
 
         return notificationManager.addAutomaticZenRule(newRule)
     }
 
-    private fun toggleZenMode(ruleName: String, turnOn: Boolean) {
-        val ruleId = getOrCreateZenRuleID(ruleName) ?: return
+    private fun toggleZenMode(turnOn: Boolean) {
+        val ruleId = getOrCreateZenRuleID() ?: return
         val summary = context.getString(
             if (turnOn) R.string.silent_mode_active else R.string.silent_mode_inactive
         )
@@ -73,27 +105,8 @@ class SoundModesManager(private val context: Context) {
         )
     }
 
-    private fun getNextMode(currentMode: Int, excluded: Set<Int> = emptySet()): Int {
-        val allModes = listOf(
-            AudioManager.RINGER_MODE_NORMAL,
-            AudioManager.RINGER_MODE_VIBRATE,
-            AudioManager.RINGER_MODE_SILENT
-        )
-
-        val currentIndex = allModes.indexOf(currentMode)
-        val size = allModes.size
-
-        for (i in 1..size) {
-            val nextMode = allModes[(currentIndex + i) % size]
-            if (nextMode !in excluded) {
-                return nextMode
-            }
-        }
-        return currentMode
-    }
-
     fun changeSoundMode(onPermissionRequired: (Intent) -> Unit) {
-        if (!isNotificationPolicyAccessPermissionEnabled(context)) {
+        if (!isNotificationPolicyAccessPermissionEnabled()) {
             val intent = Intent(context, MainActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 putExtra(context.getString(R.string.toast_name_permission), true)
@@ -104,7 +117,7 @@ class SoundModesManager(private val context: Context) {
         }
 
         val currentMode = audioManager.ringerMode
-        val nextMode = getNextMode(currentMode)
+        val nextMode = nextRingerMode(currentMode)
 
         if (nextMode != currentMode) {
             if (nextMode == AudioManager.RINGER_MODE_VIBRATE) {
@@ -112,19 +125,21 @@ class SoundModesManager(private val context: Context) {
             }
 
             if (currentMode == AudioManager.RINGER_MODE_SILENT) {
-                toggleZenMode(context.getString(R.string.silent_mode), false)
+                toggleZenMode(false)
             }
 
             if (nextMode == AudioManager.RINGER_MODE_SILENT) {
-                toggleZenMode(context.getString(R.string.silent_mode), true)
+                toggleZenMode(true)
             } else {
-                audioManager.setRingerMode(nextMode)
+                audioManager.ringerMode = nextMode
             }
         }
     }
 
-    fun getModeIcon(): Int {
-        return when (audioManager.ringerMode) {
+    fun getRingerMode(): Int = audioManager.ringerMode
+
+    fun getModeIcon(mode: Int = audioManager.ringerMode): Int {
+        return when (mode) {
             AudioManager.RINGER_MODE_SILENT -> R.drawable.volume_off
             AudioManager.RINGER_MODE_VIBRATE -> R.drawable.mobile_vibrate
             else -> R.drawable.volume_up
@@ -142,9 +157,8 @@ class SoundModesManager(private val context: Context) {
         )
     }
 
-    fun isNotificationPolicyAccessPermissionEnabled(context: Context): Boolean {
-        val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        return nm.isNotificationPolicyAccessGranted()
+    fun isNotificationPolicyAccessPermissionEnabled(): Boolean {
+        return notificationManager.isNotificationPolicyAccessGranted
     }
 
 }

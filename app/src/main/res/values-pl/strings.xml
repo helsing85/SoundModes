@@ -21,10 +21,14 @@
     <string name="silent_mode">Tryb Cichy</string>
     <string name="silent_mode_description">Tryb Cichy / Tryby dźwięków</string>
     <string name="silent_mode_active">Tryb Cichy aktywny</string>
-    <string name="silent_mode_inactive">Tyb Cichy nieaktywny</string>
+    <string name="silent_mode_inactive">Tryb Cichy nieaktywny</string>
     <string name="github_logo_description">Ikona GitHub</string>
-    <string name="widget_glance_toggle_description">Przłączaj między wszystkimi trybami</string>
+    <string name="widget_glance_toggle_description">Przełączaj między wszystkimi trybami</string>
     <string name="widget_glance">Widżet Glance</string>
     <string name="sound_change_channel_name">Zmiana trybu dźwięku</string>
     <string name="sound_change_notification_title">Aktualizowanie trybu dźwięku…</string>
+    <string name="add_tile_title">Kafelek szybkich ustawień</string>
+    <string name="add_tile_description">Dodaj kafelek do szybkich ustawień, aby zmieniać tryb dźwięku bez otwierania aplikacji.</string>
+    <string name="add_tile">Dodaj kafelek</string>
+    <string name="tile_already_added">Kafelek jest już dodany</string>
 </resources>

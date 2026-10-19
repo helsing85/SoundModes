@@ -48,7 +48,7 @@ class SoundModesService : TileService() {
     override fun onClick() {
         super.onClick()
 
-        if (!manager.isNotificationPolicyAccessPermissionEnabled(this)) {
+        if (!manager.isNotificationPolicyAccessPermissionEnabled()) {
             collapseAndStart(
                 Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS).apply {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

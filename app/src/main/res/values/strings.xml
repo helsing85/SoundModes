@@ -29,4 +29,8 @@
     <string name="widget_glance_toggle_description">Toggle between all modes</string>
     <string name="sound_change_channel_name">Sound mode change</string>
     <string name="sound_change_notification_title">Changing sound mode…</string>
+    <string name="add_tile_title">Quick Settings Tile</string>
+    <string name="add_tile_description">Add the tile to Quick Settings to change the sound mode without opening the app.</string>
+    <string name="add_tile">Add tile</string>
+    <string name="tile_already_added">Tile is already added</string>
 </resources>

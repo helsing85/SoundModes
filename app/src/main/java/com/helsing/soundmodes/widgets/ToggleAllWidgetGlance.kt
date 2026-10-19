@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
-import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.glance.ColorFilter
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -35,11 +35,12 @@ class ToggleAllWidgetGlance : GlanceAppWidget() {
     override var stateDefinition = PreferencesGlanceStateDefinition
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
+        val manager = SoundModesManager(context)
         provideContent {
-            val iconRes = SoundModesManager(context).getModeIcon()
-            currentState<Preferences>()
+            // Ringer mode is stored in the widget state by refreshAllGlanceWidgets()
+            val ringerMode = currentState(RINGER_MODE_KEY) ?: manager.getRingerMode()
 
-            MyWidgetContent(iconRes)
+            MyWidgetContent(manager.getModeIcon(ringerMode))
         }
     }
 
@@ -75,6 +76,10 @@ class ToggleAllWidgetGlance : GlanceAppWidget() {
     }
 
     override val sizeMode: SizeMode = SizeMode.Single
+
+    companion object {
+        val RINGER_MODE_KEY = intPreferencesKey("ringer_mode")
+    }
 }
 
 class ToggleModeAction : ActionCallback {
@@ -84,7 +89,7 @@ class ToggleModeAction : ActionCallback {
         parameters: ActionParameters
     ) {
         val manager = SoundModesManager(context)
-        if (manager.isNotificationPolicyAccessPermissionEnabled(context) &&
+        if (manager.isNotificationPolicyAccessPermissionEnabled() &&
             SoundChangeForegroundService.start(context)
         ) {
             return
