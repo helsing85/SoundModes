@@ -12,7 +12,7 @@ android {
     defaultConfig {
         applicationId = "com.helsing.soundmodes"
         minSdk = 35
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 12
         versionName = "1.6.0"
 
