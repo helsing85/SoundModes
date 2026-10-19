@@ -28,6 +28,7 @@ import androidx.glance.preview.ExperimentalGlancePreviewApi
 import androidx.glance.preview.Preview
 import androidx.glance.state.PreferencesGlanceStateDefinition
 import com.helsing.soundmodes.R
+import com.helsing.soundmodes.SoundChangeForegroundService
 import com.helsing.soundmodes.SoundModesManager
 
 class ToggleAllWidgetGlance : GlanceAppWidget() {
@@ -82,9 +83,17 @@ class ToggleModeAction : ActionCallback {
         glanceId: GlanceId,
         parameters: ActionParameters
     ) {
-        SoundModesManager(context).changeSoundMode { intent ->
+        val manager = SoundModesManager(context)
+        if (manager.isNotificationPolicyAccessPermissionEnabled(context) &&
+            SoundChangeForegroundService.start(context)
+        ) {
+            return
+        }
+
+        manager.changeSoundMode { intent ->
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }
+        ToggleAllWidgetGlanceReceiver.refreshAllGlanceWidgets(context)
     }
 }

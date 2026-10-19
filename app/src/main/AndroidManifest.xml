@@ -35,17 +35,21 @@
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
-            <meta-data
-                android:name="android.service.quicksettings.ACTIVE_TILE"
-                android:value="true" />
         </service>
         <service
             android:name=".SoundChangeForegroundService"
             android:foregroundServiceType="specialUse"
             android:exported="false">
             <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="System audio toggle from widget/tile" />
+                android:value="Changes the ringer mode (Normal/Vibrate/Silent) when the user taps the quick settings tile or the home screen widget. Android 17 ignores ringer mode changes from apps without a visible activity or a foreground service." />
         </service>
+        <activity
+            android:name=".SoundChangeActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <receiver android:name=".widgets.ToggleAllWidgetGlanceReceiver"
             android:exported="true">
             <intent-filter>

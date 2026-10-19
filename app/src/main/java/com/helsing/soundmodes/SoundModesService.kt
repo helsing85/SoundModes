@@ -1,7 +1,10 @@
 package com.helsing.soundmodes
 
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.drawable.Icon
 import android.media.AudioManager
 import android.provider.Settings
@@ -11,6 +14,15 @@ import android.service.quicksettings.TileService
 
 class SoundModesService : TileService() {
     private val manager by lazy { SoundModesManager(this) }
+
+    // Refreshes the tile when the ringer mode is changed while the tile is visible,
+    // either by this app or by the system (e.g. volume buttons)
+    private val ringerModeReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            refreshTile()
+        }
+    }
+    private var isReceiverRegistered = false
 
     private fun refreshTile() {
         val tile = qsTile ?: return
@@ -23,53 +35,57 @@ class SoundModesService : TileService() {
         tile.updateTile()
     }
 
+    private fun collapseAndStart(intent: Intent) {
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        startActivityAndCollapse(pendingIntent)
+    }
+
     override fun onClick() {
         super.onClick()
 
         if (!manager.isNotificationPolicyAccessPermissionEnabled(this)) {
-            val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-            val pendingIntent = PendingIntent.getActivity(
-                this,
-                0,
-                intent,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            collapseAndStart(
+                Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
             )
-            startActivityAndCollapse(pendingIntent)
             return
         }
 
-        val tile = qsTile
-        if (tile != null) {
-            val currentMode = (getSystemService(AUDIO_SERVICE) as AudioManager).ringerMode
-
-            val allModes = listOf(
-                AudioManager.RINGER_MODE_NORMAL,
-                AudioManager.RINGER_MODE_VIBRATE,
-                AudioManager.RINGER_MODE_SILENT
+        // Tile is refreshed by ringerModeReceiver when the mode is changed
+        if (!SoundChangeForegroundService.start(this)) {
+            // Fallback: a visible activity is also a valid state to change the ringer mode
+            collapseAndStart(
+                Intent(this, SoundChangeActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
             )
-            val nextMode = allModes[(allModes.indexOf(currentMode) + 1) % allModes.size]
-
-            val nextIcon = when (nextMode) {
-                AudioManager.RINGER_MODE_SILENT -> R.drawable.volume_off
-                AudioManager.RINGER_MODE_VIBRATE -> R.drawable.mobile_vibrate
-                else -> R.drawable.volume_up
-            }
-
-            tile.icon = Icon.createWithResource(this, nextIcon)
-            tile.updateTile()
         }
-
-
-        val serviceIntent = Intent(this, SoundChangeForegroundService::class.java)
-        this.startForegroundService(serviceIntent)
     }
 
     override fun onStartListening() {
         super.onStartListening()
+        if (!isReceiverRegistered) {
+            registerReceiver(
+                ringerModeReceiver,
+                IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION),
+                RECEIVER_NOT_EXPORTED
+            )
+            isReceiverRegistered = true
+        }
         refreshTile()
     }
+
+    override fun onStopListening() {
+        if (isReceiverRegistered) {
+            unregisterReceiver(ringerModeReceiver)
+            isReceiverRegistered = false
+        }
+        super.onStopListening()
+    }
 }
-
-
