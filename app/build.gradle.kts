@@ -7,7 +7,7 @@ plugins {
 android {
     namespace = "com.helsing.soundmodes"
     compileSdk {
-        version = release(36)
+        version = release(37)
     }
 
     defaultConfig {
@@ -65,14 +65,11 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.material3)
-    implementation(libs.ads.mobile.sdk)
     implementation(libs.androidx.glance)
     implementation(libs.androidx.glance.preview)
     implementation(libs.androidx.glance.appwidget)
     implementation(libs.androidx.glance.appwidget.preview)
     implementation(libs.androidx.glance.material3)
-    debugImplementation(libs.androidx.ui.tooling)
     implementation(libs.kotlinx.coroutines.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
