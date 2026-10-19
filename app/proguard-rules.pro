@@ -19,3 +19,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+# Glance creates ActionCallback implementations (e.g. ToggleModeAction) by reflection.
+# The rule shipped with Glance keeps only the class name, which is not enough in R8 full mode.
+-keep class * implements androidx.glance.appwidget.action.ActionCallback {
+    public <init>();
+}
