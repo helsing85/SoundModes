@@ -17,15 +17,19 @@ class ToggleAllWidgetGlanceReceiver : GlanceAppWidgetReceiver() {
         fun updateAllGlanceWidgets(context: Context) {
             val scope = CoroutineScope(Dispatchers.Main)
             scope.launch {
-                val manager = GlanceAppWidgetManager(context)
-                val glanceIds = manager.getGlanceIds(ToggleAllWidgetGlance::class.java)
+                refreshAllGlanceWidgets(context)
+            }
+        }
 
-                glanceIds.forEach { glanceId ->
-                    updateAppWidgetState(context, glanceId) { prefs ->
-                        prefs[longPreferencesKey("now")] = System.currentTimeMillis()
-                    }
-                    ToggleAllWidgetGlance().update(context, glanceId)
+        suspend fun refreshAllGlanceWidgets(context: Context) {
+            val manager = GlanceAppWidgetManager(context)
+            val glanceIds = manager.getGlanceIds(ToggleAllWidgetGlance::class.java)
+
+            glanceIds.forEach { glanceId ->
+                updateAppWidgetState(context, glanceId) { prefs ->
+                    prefs[longPreferencesKey("now")] = System.currentTimeMillis()
                 }
+                ToggleAllWidgetGlance().update(context, glanceId)
             }
         }
     }

@@ -27,4 +27,6 @@
     <string name="github_logo_description">GitHub Icon</string>
     <string name="widget_glance">Glance Widget</string>
     <string name="widget_glance_toggle_description">Toggle between all modes</string>
+    <string name="sound_change_channel_name">Sound mode change</string>
+    <string name="sound_change_notification_title">Changing sound mode…</string>
 </resources>
