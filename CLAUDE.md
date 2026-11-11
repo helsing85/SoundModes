@@ -17,21 +17,38 @@ Normal/Vibrate via `AudioManager.setRingerMode()`. Main device: Pixel 8 on Andro
 | `MainActivity.kt` | Compose UI: permission card, "Add tile" card (`StatusBarManager.requestAddTileService`), Material 3 `TopAppBar` |
 
 ## Build environment
+### Current: Ubuntu VM (since Nov 2026)
+- JDK: snap Android Studio JBR – `JAVA_HOME=/snap/android-studio/250/jbr` (path contains the snap
+  revision, check `ls /snap/android-studio/` after Studio updates). `java` is on PATH.
+- adb: `/usr/bin/adb` (on PATH). SDK: `~/Android/Sdk`. `gh` CLI is not installed.
+- Emulator: `~/Android/Sdk/emulator/emulator -avd Medium_Phone_API_37.0 -no-snapshot-load -no-audio`
+  (API 37 Google Play image, 1080x2400, 420 dpi). Needs ~10 GB free disk (data partition is 10 GB);
+  it refuses to start otherwise.
+- Python 3 + Pillow available (used for cropping README screenshots, run with `python3 -I`).
+- Commands:
+  ```bash
+  JAVA_HOME=/snap/android-studio/250/jbr ./gradlew :app:assembleDebug :app:assembleRelease :app:testDebugUnitTest :app:lintDebug
+  ```
+
+### Optional: Windows (previous environment – keep, the owner may move back if the VM is too slow)
 - JDK: Android Studio bundled JBR – `C:\Program Files\Android\Android Studio\jbr`
   (`java` is not on PATH, set `JAVA_HOME`). During a Studio update the folder was temporarily
   incomplete and `C:\Program Files\Android\Android Studio1\jbr` had to be used.
 - adb: `%LOCALAPPDATA%\Android\Sdk\platform-tools\adb.exe` (not on PATH). Python is not installed.
-- Stack: Gradle 9.8.2, AGP 9.4.1 (new DSL, built-in Kotlin), Kotlin 2.4.21, Compose BOM 2026.09.00,
-  Glance 1.2.0, compileSdk/targetSdk 37, minSdk 35, Java 17.
-- Commands:
+- Commands (Git Bash):
   ```bash
   JAVA_HOME="/c/Program Files/Android/Android Studio/jbr" ./gradlew :app:assembleDebug :app:assembleRelease :app:testDebugUnitTest :app:lintDebug
   ```
+
+### Common
+- Stack: Gradle 9.8.2, AGP 9.4.1 (new DSL, built-in Kotlin), Kotlin 2.4.21, Compose BOM 2026.09.00,
+  Glance 1.2.0, compileSdk/targetSdk 37, minSdk 35, Java 17.
 - APK name comes from `base.archivesName` → `SoundModes_v<versionName>-<buildType>.apk`.
 - Release builds: R8 minify + resource shrinking, **signed with the debug key** (owner's choice –
   the app was always installed from debug builds; no release keystore exists).
-- Remotes: `origin` = GitHub (helsing85/SoundModes), `gitea` = local Gitea (192.168.1.228:3000).
-  Tags are fetched per remote with `git fetch <remote> --tags`.
+- Remote: `origin` = GitHub (helsing85/SoundModes) – the only remote to push to; the local Gitea
+  mirrors GitHub automatically. On the Ubuntu VM HTTPS has no saved login – push over SSH
+  (`git push git@github.com:helsing85/SoundModes.git master`, the SSH key is registered).
 
 ## Important knowledge / gotchas
 - **Android 17 background audio hardening**: `setRingerMode()` is *silently ignored* unless the app
@@ -78,9 +95,21 @@ Normal/Vibrate via `AudioManager.setRingerMode()`. Main device: Pixel 8 on Andro
   Vibrate → Silent (zen=3) → Normal → Vibrate; FGS allowed with WIU; no crashes.
 
 ## Unresolved / to do
-- [ ] **Widget tap not tested** on a device/emulator in the release build (could not place a widget via adb).
+- [x] Widget tap tested on the emulator (release build, Nov 2026): placed via the launcher widget
+      picker (search "Sound", `input draganddrop` to the home screen). Cold start Silent → Normal,
+      then Vibrate → Silent, FGS allowed each time, no crash. Note: after `am force-stop` the launcher
+      shows a "stopped app" placeholder and the first tap only restores the widget (launcher behaviour).
 - [ ] Tile not yet confirmed on the physical Pixel 8 (only emulator). After confirming, README can say "tested on Pixel 8".
-- [ ] `img/main.png` is outdated (no "Quick Settings Tile" card, new top bar).
+- [x] README screenshots regenerated on the emulator (Nov 2026): `main.png`, `main_dark.png`,
+      tile `normal/vibrate/silent.png` (wide tile, resized in QS edit mode), `widget_modes.png`,
+      `widget_light/dark.png` (picker).
+- [ ] Light theme: status bar icons are dark on the dark-blue `TopAppBar` (poor contrast) –
+      `enableEdgeToEdge()` picks dark icons for the light theme; pass a `SystemBarStyle.dark(...)`
+      for the status bar or use a light app bar colour.
+- [ ] Widget has no background: in the light theme the `primary`-tinted icon is dark blue and hard to
+      see on dark wallpapers. Consider `GlanceTheme.colors.widgetBackground` / a rounded container.
+- [ ] Widget picker shows the label twice ("Sound Modes / Sound Modes") – the widget
+      receiver has no own `android:label`, so the app name is used as the widget name too.
 - [ ] Widget does not refresh when the ringer mode is changed outside the app (volume keys) –
       only after its own taps / boot. Possible fix: refresh in `onStartListening`-like hooks or a
       dynamic receiver while the process is alive.
@@ -93,7 +122,10 @@ Normal/Vibrate via `AudioManager.setRingerMode()`. Main device: Pixel 8 on Andro
       `code_modernization`) can be deleted.
 
 ## Risks / thoughts
-- Debug-key signing: back up `C:\Users\helsi\.android\debug.keystore`. Losing it means installed
+- Debug-key signing: back up `C:\Users\helsi\.android\debug.keystore`. The Ubuntu VM has its own
+  `~/.android/debug.keystore` (created 2026-11-04, SHA-256 `D6:14:31:B1:…:1D:CB:FD`). If it was not
+  copied from Windows, APKs built on the VM cannot update apps installed from Windows builds
+  (and vice versa) – compare fingerprints with `keytool -list` and copy one keystore to both. Losing it means installed
   apps cannot be updated without uninstalling. Google Play would require a real release keystore
   (and a `specialUse` FGS justification – the manifest `PROPERTY_SPECIAL_USE_FGS_SUBTYPE` text can be reused).
 - `strictFullModeForKeepRules=false` may be removed in a future AGP (10?). Then explicit keep rules
