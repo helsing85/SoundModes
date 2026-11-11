@@ -19,8 +19,8 @@ This project was inspired by the [Sound-Toggle](https://github.com/grmasa/Sound-
   ![Normal mode tile](img/normal.png)<br>
   ![Vibrate mode tile](img/vibrate.png)<br>
   ![Silent mode tile](img/silent.png)
-- **One-tap tile setup:** Add the tile to Quick Settings straight from the app with the **Add tile** button, without editing the Quick Settings panel.
-- **Home screen widget:** A 1×1 resizable widget built with Jetpack Glance. One tap switches to the next mode, and the icon uses the Material You colors of your wallpaper.
+- **One-tap tile setup:** Add the tile to Quick Settings straight from the app with the **Add tile** button, without editing the Quick Settings panel. Once the tile is added, the button shows **Tile added**.
+- **Home screen widget:** A 1×1 resizable widget built with Jetpack Glance. One tap switches to the next mode. It shows the current mode, also after a change with the volume buttons or the tile, and uses the Material You colors of your wallpaper.
 
   ![Widget in Normal, Vibrate and Silent mode](img/widget_modes.png)
 
