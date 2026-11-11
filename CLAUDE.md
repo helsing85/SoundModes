@@ -51,6 +51,8 @@ Normal/Vibrate via `AudioManager.setRingerMode()`. Main device: Pixel 8 on Andro
   (`git push git@github.com:helsing85/SoundModes.git master`, the SSH key is registered).
 
 ## Important knowledge / gotchas
+- **Do not delete branches by default** – merged feature branches are kept (local and remote).
+  Delete one only when the owner explicitly asks for it.
 - **Android 17 background audio hardening**: `setRingerMode()` is *silently ignored* unless the app
   has a visible activity or a non-`shortService` foreground service. For targetSdk 37 the FGS must
   also have while-in-use (WIU) capability. Zen rule changes (Silent) are not affected.
@@ -116,8 +118,6 @@ Normal/Vibrate via `AudioManager.setRingerMode()`. Main device: Pixel 8 on Andro
 - [x] `versionCode` 15 / 2.0.3 – keep increasing it on every release.
 - [ ] Glance 1.2 generated widget previews (Android 15+ widget picker) – not implemented.
 - [ ] Template tests `ExampleUnitTest` / `ExampleInstrumentedTest` can be removed.
-- [ ] Merged feature branches (`fix_tile_android17`, `dependency_cleanup`, `agp9_migration`,
-      `code_modernization`) can be deleted.
 
 ## Risks / thoughts
 - Debug-key signing: back up `C:\Users\helsi\.android\debug.keystore`. The Ubuntu VM has its own
