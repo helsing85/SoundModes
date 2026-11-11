@@ -1,6 +1,7 @@
 package com.helsing.soundmodes.widgets
 
 import android.content.Context
+import android.util.Log
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
@@ -16,6 +17,27 @@ class ToggleAllWidgetGlanceReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = ToggleAllWidgetGlance()
 
     companion object {
+        /**
+         * Publishes the generated widget picker preview once per app version.
+         * The system rate-limits this call, so it is not repeated on every process start.
+         */
+        suspend fun publishWidgetPreviews(context: Context) {
+            val soundModesManager = SoundModesManager(context)
+            val versionCode = context.packageManager
+                .getPackageInfo(context.packageName, 0).longVersionCode
+            if (soundModesManager.getWidgetPreviewVersion() == versionCode) return
+
+            val result = GlanceAppWidgetManager(context)
+                .setWidgetPreviews(ToggleAllWidgetGlanceReceiver::class)
+            if (result == GlanceAppWidgetManager.SET_WIDGET_PREVIEWS_RESULT_SUCCESS) {
+                soundModesManager.setWidgetPreviewVersion(versionCode)
+            } else {
+                Log.w(TAG, "Widget preview not published, result $result")
+            }
+        }
+
+        private const val TAG = "SoundModesWidget"
+
         /**
          * Fire-and-forget version of [refreshAllGlanceWidgets].
          */

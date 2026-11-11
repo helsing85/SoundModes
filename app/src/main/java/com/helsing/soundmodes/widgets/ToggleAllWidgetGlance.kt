@@ -47,6 +47,17 @@ class ToggleAllWidgetGlance : GlanceAppWidget() {
         }
     }
 
+    /**
+     * Generated preview for the widget picker (Android 15+), published by
+     * [ToggleAllWidgetGlanceReceiver.publishWidgetPreviews]. Launchers without support for
+     * generated previews use the static `previewLayout` instead.
+     */
+    override suspend fun providePreview(context: Context, widgetCategory: Int) {
+        provideContent {
+            MyWidgetContent(R.drawable.volume_up)
+        }
+    }
+
     @Composable
     private fun MyWidgetContent(iconRes: Int) {
         val context = LocalContext.current

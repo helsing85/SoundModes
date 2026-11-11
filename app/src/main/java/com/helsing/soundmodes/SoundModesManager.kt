@@ -215,6 +215,13 @@ class SoundModesManager(private val context: Context) {
         }
     }
 
+    /** App version code for which the generated widget preview was published, or -1. */
+    fun getWidgetPreviewVersion(): Long = prefs.getLong(KEY_WIDGET_PREVIEW_VERSION, -1)
+
+    fun setWidgetPreviewVersion(versionCode: Long) {
+        prefs.edit { putLong(KEY_WIDGET_PREVIEW_VERSION, versionCode) }
+    }
+
     private val prefs by lazy { context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE) }
 
     private companion object {
@@ -224,5 +231,6 @@ class SoundModesManager(private val context: Context) {
         const val VERIFY_CHECKS = 6
         const val PREFS_NAME = "sound_modes"
         const val KEY_TILE_ADDED = "tile_added"
+        const val KEY_WIDGET_PREVIEW_VERSION = "widget_preview_version"
     }
 }
