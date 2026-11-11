@@ -47,8 +47,10 @@ Normal/Vibrate via `AudioManager.setRingerMode()`. Main device: Pixel 8 on Andro
 - Release builds: R8 minify + resource shrinking, **signed with the debug key** (owner's choice –
   the app was always installed from debug builds; no release keystore exists).
 - Remote: `origin` = GitHub (helsing85/SoundModes) – the only remote to push to; the local Gitea
-  mirrors GitHub automatically. On the Ubuntu VM HTTPS has no saved login – push over SSH
-  (`git push git@github.com:helsing85/SoundModes.git master`, the SSH key is registered).
+  mirrors GitHub automatically. On the Ubuntu VM `origin` fetches over HTTPS and pushes over SSH
+  (`git remote set-url --push origin git@github.com:helsing85/SoundModes.git`, the SSH key is
+  registered; HTTPS has no saved login), so plain `git push` works. All local branches track
+  `origin/<branch>`. Tags are lightweight (`vX.Y.Z` on the version bump commit).
 
 ## Important knowledge / gotchas
 - **Do not delete branches by default** – merged feature branches are kept (local and remote).
