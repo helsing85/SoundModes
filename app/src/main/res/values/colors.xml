@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <!-- Same colors as GlanceTheme.colors.widgetBackground, used by the static widget preview -->
     <color name="widget_background">@android:color/system_accent2_50</color>
+    <!-- Same color as GlanceTheme.colors.primary -->
+    <color name="widget_icon">@android:color/system_accent1_600</color>
 </resources>
