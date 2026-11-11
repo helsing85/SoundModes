@@ -103,19 +103,17 @@ Normal/Vibrate via `AudioManager.setRingerMode()`. Main device: Pixel 8 on Andro
 - [x] README screenshots regenerated on the emulator (Nov 2026): `main.png`, `main_dark.png`,
       tile `normal/vibrate/silent.png` (wide tile, resized in QS edit mode), `widget_modes.png`,
       `widget_light/dark.png` (picker).
-- [ ] Light theme: status bar icons are dark on the dark-blue `TopAppBar` (poor contrast) –
-      `enableEdgeToEdge()` picks dark icons for the light theme; pass a `SystemBarStyle.dark(...)`
-      for the status bar or use a light app bar colour.
-- [ ] Widget has no background: in the light theme the `primary`-tinted icon is dark blue and hard to
-      see on dark wallpapers. Consider `GlanceTheme.colors.widgetBackground` / a rounded container.
-- [ ] Widget picker shows the label twice ("Sound Modes / Sound Modes") – the widget
-      receiver has no own `android:label`, so the app name is used as the widget name too.
-- [ ] Widget does not refresh when the ringer mode is changed outside the app (volume keys) –
-      only after its own taps / boot. Possible fix: refresh in `onStartListening`-like hooks or a
-      dynamic receiver while the process is alive.
-- [ ] Launcher icon has no monochrome layer (no themed icon on Pixel); `mipmap-anydpi-v26` folder is
-      obsolete with minSdk 35; `R.string.widget_glance` is unused (lint warnings).
-- [ ] `versionCode` is 14 for both 2.0.1 and 2.0.2 – increase it on every release.
+- [x] Light theme status bar contrast – fixed with an inverted `SystemBarStyle.auto` in `MainActivity` (2.0.3).
+- [x] Widget background – `widgetBackground` + system corner radius, same colors in the static preview layout (2.0.3).
+- [x] Widget name – receiver `android:label="@string/widget_name"` (2.0.3).
+- [x] Widget follows external ringer changes (2.0.3): `SoundModesApp` dynamic receiver while the
+      process is alive, plus refresh on process start and in the tile's `onStartListening()`
+      (`onlyIfChanged = true`). Changes made while the process is dead show up the next time the
+      process starts or Quick Settings is opened.
+- [x] Monochrome launcher icon layer added (2.0.3).
+- [ ] `mipmap-anydpi-v26` folder is obsolete with minSdk 35; unused template colors and
+      `ic_launcher_background` drawable (lint warnings).
+- [x] `versionCode` 15 / 2.0.3 – keep increasing it on every release.
 - [ ] Glance 1.2 generated widget previews (Android 15+ widget picker) – not implemented.
 - [ ] Template tests `ExampleUnitTest` / `ExampleInstrumentedTest` can be removed.
 - [ ] Merged feature branches (`fix_tile_android17`, `dependency_cleanup`, `agp9_migration`,
