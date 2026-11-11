@@ -1,9 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Concept A "Cycle ring": a speaker inside a circular arrow - one tap moves to the next sound mode.
+     Geometry in the 108x108 adaptive icon grid (glyph centred on 54,54). -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="48dp"
-    android:height="48dp"
-    android:viewportWidth="960"
-    android:viewportHeight="960">
-  <path
-      android:pathData="m691,605 l-39,-41q16,-18 24.5,-40t8.5,-46q0,-23 -8.5,-45.5T652,394l41,-42q24,25 38,57.5t14,67.5q0,37 -14,70t-40,58ZM774,692 L734,649q34,-35 53,-78.5t19,-91.5q0,-48 -19.5,-91T729,316l46,-46q43,41 67,95t24,114q0,61 -24,116t-68,97ZM873,996L6,115l51,-50L924,946l-51,50ZM479,260q15,0 25.5,-10.5T515,224q0,-15 -10.5,-25.5T479,188q-15,0 -25.5,10.5T443,224q0,15 10.5,25.5T479,260ZM271,943q-39,0 -66.5,-27.5T177,849v-662l606,617v45q0,37 -27,65.5T690,943L271,943ZM518,443L190,115q0,-41 28,-69.5t68,-28.5h403q39,0 66.5,27.5T783,111v64L518,443ZM-20,595v-230h60v230h-60ZM82,683v-406h60v406h-60"
-      android:fillColor="#000"/>
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="52"
+    android:viewportHeight="52">
+    <group
+        android:translateX="-28"
+        android:translateY="-28">
+        <path
+            android:pathData="M68.14,37.15 A22,22 0 1 1 39.86,37.15"
+            android:strokeColor="#FFFFFFFF"
+            android:strokeWidth="4.4"
+            android:strokeLineCap="round" />
+        <path
+            android:pathData="M44.84,32.97 L35.34,33.63 L42.54,42.21 Z"
+            android:fillColor="#FFFFFFFF"
+            android:strokeColor="#FFFFFFFF"
+            android:strokeWidth="1.2"
+            android:strokeLineJoin="round" />
+        <path
+            android:pathData="M45.7,50.28 L50.04,50.28 L56.24,45.32 L56.24,62.68 L50.04,57.72 L45.7,57.72 Z"
+            android:fillColor="#FFFFFFFF"
+            android:strokeColor="#FFFFFFFF"
+            android:strokeWidth="1.364"
+            android:strokeLineJoin="round" />
+        <path
+            android:pathData="M59.56,50.31 A4.96,4.96 0 0 1 59.56,57.69"
+            android:strokeColor="#FFFFFFFF"
+            android:strokeWidth="2.604"
+            android:strokeLineCap="round" />
+    </group>
 </vector>
