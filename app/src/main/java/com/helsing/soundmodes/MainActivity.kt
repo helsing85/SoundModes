@@ -4,11 +4,14 @@ import android.app.StatusBarManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
+import android.graphics.Color
 import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.clickable
@@ -58,7 +61,18 @@ import com.helsing.soundmodes.ui.theme.SoundModesTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        // The top app bar uses the primary color, which is dark in the light theme and light
+        // in the dark theme, so the status bar icons need the opposite of the default style
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.auto(
+                lightScrim = Color.TRANSPARENT,
+                darkScrim = Color.TRANSPARENT,
+                detectDarkMode = { resources ->
+                    (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) !=
+                            Configuration.UI_MODE_NIGHT_YES
+                }
+            )
+        )
         setContent {
             AppMainView()
         }
