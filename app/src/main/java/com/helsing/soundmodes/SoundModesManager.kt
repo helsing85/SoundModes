@@ -10,6 +10,7 @@ import android.os.VibrationAttributes
 import android.os.VibrationEffect
 import android.os.VibratorManager
 import android.service.notification.Condition
+import androidx.core.content.edit
 import androidx.core.net.toUri
 
 /**
@@ -161,4 +162,23 @@ class SoundModesManager(private val context: Context) {
         return notificationManager.isNotificationPolicyAccessGranted
     }
 
+    /**
+     * Whether the Quick Settings tile is added. Android has no API to query this, so the flag is
+     * kept up to date by [SoundModesService] (tile added/removed/visible) and by the result of
+     * the "add tile" request in the main screen.
+     */
+    fun isTileAdded(): Boolean = prefs.getBoolean(KEY_TILE_ADDED, false)
+
+    fun setTileAdded(added: Boolean) {
+        if (isTileAdded() != added) {
+            prefs.edit { putBoolean(KEY_TILE_ADDED, added) }
+        }
+    }
+
+    private val prefs by lazy { context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE) }
+
+    private companion object {
+        const val PREFS_NAME = "sound_modes"
+        const val KEY_TILE_ADDED = "tile_added"
+    }
 }

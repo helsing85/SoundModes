@@ -69,8 +69,20 @@ class SoundModesService : TileService() {
         }
     }
 
+    override fun onTileAdded() {
+        super.onTileAdded()
+        manager.setTileAdded(true)
+    }
+
+    override fun onTileRemoved() {
+        manager.setTileAdded(false)
+        super.onTileRemoved()
+    }
+
     override fun onStartListening() {
         super.onStartListening()
+        // The tile is visible, so it is added (also covers tiles added before this flag existed)
+        manager.setTileAdded(true)
         if (!isReceiverRegistered) {
             registerReceiver(
                 ringerModeReceiver,

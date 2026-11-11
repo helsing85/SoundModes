@@ -189,6 +189,10 @@ fun MainColumn(modifier: Modifier = Modifier) {
         mutableStateOf(isPreview || manager.isNotificationPolicyAccessPermissionEnabled())
     }
 
+    var isTileAdded by remember {
+        mutableStateOf(!isPreview && manager.isTileAdded())
+    }
+
     if (!isPreview) {
         val key = stringResource(R.string.toast_name_permission)
         val activity = context as? ComponentActivity
@@ -210,6 +214,7 @@ fun MainColumn(modifier: Modifier = Modifier) {
         LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
             isNotificationPolicyAccessGranted =
                 manager.isNotificationPolicyAccessPermissionEnabled()
+            isTileAdded = manager.isTileAdded()
         }
     }
 
@@ -293,10 +298,22 @@ fun MainColumn(modifier: Modifier = Modifier) {
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Button(
-                    onClick = { requestAddTile(context) },
+                    onClick = {
+                        requestAddTile(context) {
+                            manager.setTileAdded(true)
+                            isTileAdded = true
+                        }
+                    },
+                    enabled = !isTileAdded,
                     modifier = Modifier.align(Alignment.End)
                 ) {
-                    Text(stringResource(R.string.add_tile))
+                    Text(
+                        text = if (isTileAdded) {
+                            stringResource(R.string.tile_added)
+                        } else {
+                            stringResource(R.string.add_tile)
+                        }
+                    )
                 }
             }
         }
@@ -331,8 +348,9 @@ fun MainColumn(modifier: Modifier = Modifier) {
 
 /**
  * Shows the system dialog which adds the Sound Modes tile to Quick Settings.
+ * [onTileAdded] is called when the tile was added or had already been added.
  */
-private fun requestAddTile(context: Context) {
+private fun requestAddTile(context: Context, onTileAdded: () -> Unit) {
     val statusBarManager = context.getSystemService(StatusBarManager::class.java)
     statusBarManager.requestAddTileService(
         ComponentName(context, SoundModesService::class.java),
@@ -340,8 +358,10 @@ private fun requestAddTile(context: Context) {
         Icon.createWithResource(context, R.drawable.volume_up),
         context.mainExecutor
     ) { result ->
-        if (result == StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ALREADY_ADDED) {
-            Toast.makeText(context, R.string.tile_already_added, Toast.LENGTH_SHORT).show()
+        if (result == StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ADDED ||
+            result == StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ALREADY_ADDED
+        ) {
+            onTileAdded()
         }
     }
 }

@@ -30,5 +30,5 @@
     <string name="add_tile_title">Kafelek szybkich ustawień</string>
     <string name="add_tile_description">Dodaj kafelek do szybkich ustawień, aby zmieniać tryb dźwięku bez otwierania aplikacji.</string>
     <string name="add_tile">Dodaj kafelek</string>
-    <string name="tile_already_added">Kafelek jest już dodany</string>
+    <string name="tile_added">Kafelek dodany</string>
 </resources>
