@@ -51,11 +51,10 @@ class SoundChangeForegroundService : Service() {
             ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
         )
 
-        SoundModesManager(this).changeSoundMode {}
-
-        // Keep the service in foreground until the widgets are refreshed, otherwise
-        // the process can be frozen before the update is finished
+        // Keep the service in foreground until the mode is changed and the widgets are
+        // refreshed, otherwise the ringer change is ignored or the process is frozen
         serviceScope.launch {
+            SoundModesManager(this@SoundChangeForegroundService).changeSoundMode {}
             ToggleAllWidgetGlanceReceiver.refreshAllGlanceWidgets(this@SoundChangeForegroundService)
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf(startId)

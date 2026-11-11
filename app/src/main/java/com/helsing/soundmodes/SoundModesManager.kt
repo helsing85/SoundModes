@@ -10,8 +10,11 @@ import android.os.VibrationAttributes
 import android.os.VibrationEffect
 import android.os.VibratorManager
 import android.service.notification.Condition
+import android.util.Log
 import androidx.core.content.edit
 import androidx.core.net.toUri
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withTimeoutOrNull
 
 /**
  * Returns the ringer mode which follows [currentMode] in the cycle Normal -> Vibrate -> Silent,
@@ -106,7 +109,14 @@ class SoundModesManager(private val context: Context) {
         )
     }
 
-    fun changeSoundMode(onPermissionRequired: (Intent) -> Unit) {
+    /**
+     * Switches to the next ringer mode (Normal -> Vibrate -> Silent).
+     *
+     * Suspends while leaving Silent mode: the zen rule is turned off asynchronously and the
+     * system then restores the ringer mode from before Silent (Vibrate). Setting the new mode
+     * before that has finished could be overwritten, leaving the phone in Vibrate.
+     */
+    suspend fun changeSoundMode(onPermissionRequired: (Intent) -> Unit) {
         if (!isNotificationPolicyAccessPermissionEnabled()) {
             val intent = Intent(context, MainActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -127,12 +137,42 @@ class SoundModesManager(private val context: Context) {
 
             if (currentMode == AudioManager.RINGER_MODE_SILENT) {
                 toggleZenMode(false)
+                awaitSilentModeExit()
             }
 
             if (nextMode == AudioManager.RINGER_MODE_SILENT) {
                 toggleZenMode(true)
             } else {
-                audioManager.ringerMode = nextMode
+                setRingerModeVerified(nextMode)
+            }
+        }
+    }
+
+    /**
+     * Waits until Do Not Disturb is off and the system has restored the ringer mode,
+     * at most [SILENT_EXIT_TIMEOUT_MS].
+     */
+    private suspend fun awaitSilentModeExit() {
+        withTimeoutOrNull(SILENT_EXIT_TIMEOUT_MS) {
+            while (notificationManager.currentInterruptionFilter !=
+                NotificationManager.INTERRUPTION_FILTER_ALL ||
+                audioManager.ringerMode == AudioManager.RINGER_MODE_SILENT
+            ) {
+                delay(POLL_INTERVAL_MS)
+            }
+        }
+    }
+
+    /**
+     * Sets [mode] and sets it again if a late system change overwrites it shortly afterwards.
+     */
+    private suspend fun setRingerModeVerified(mode: Int) {
+        audioManager.ringerMode = mode
+        repeat(VERIFY_CHECKS) {
+            delay(POLL_INTERVAL_MS)
+            if (audioManager.ringerMode != mode) {
+                Log.w(TAG, "Ringer mode changed to ${audioManager.ringerMode}, setting $mode again")
+                audioManager.ringerMode = mode
             }
         }
     }
@@ -178,6 +218,10 @@ class SoundModesManager(private val context: Context) {
     private val prefs by lazy { context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE) }
 
     private companion object {
+        const val TAG = "SoundModesManager"
+        const val SILENT_EXIT_TIMEOUT_MS = 1000L
+        const val POLL_INTERVAL_MS = 50L
+        const val VERIFY_CHECKS = 6
         const val PREFS_NAME = "sound_modes"
         const val KEY_TILE_ADDED = "tile_added"
     }
