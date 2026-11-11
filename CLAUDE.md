@@ -41,7 +41,7 @@ Normal/Vibrate via `AudioManager.setRingerMode()`. Main device: Pixel 8 on Andro
   ```
 
 ### Common
-- Stack: Gradle 9.8.2, AGP 9.4.1 (new DSL, built-in Kotlin), Kotlin 2.4.21, Compose BOM 2026.09.00,
+- Stack: Gradle 9.9.1, AGP 9.5.1 (new DSL, built-in Kotlin), Kotlin 2.4.21, Compose BOM 2026.09.00,
   Glance 1.2.0, compileSdk/targetSdk 37, minSdk 35, Java 17.
 - APK name comes from `base.archivesName` → `SoundModes_v<versionName>-<buildType>.apk`.
 - Release builds: R8 minify + resource shrinking, **signed with the debug key** (owner's choice –
@@ -55,6 +55,10 @@ Normal/Vibrate via `AudioManager.setRingerMode()`. Main device: Pixel 8 on Andro
 ## Important knowledge / gotchas
 - **Do not delete branches by default** – merged feature branches are kept (local and remote).
   Delete one only when the owner explicitly asks for it.
+- **Silent → Normal race** (fixed in 2.0.4): turning the zen rule off is asynchronous and the system
+  then restores the ringer mode from before Silent (Vibrate). `changeSoundMode()` is `suspend`, waits
+  (max 1 s) for DND off + ringer not silent, then sets the mode and re-applies it if overwritten.
+  Callers must keep the FGS/activity alive until it returns. Test: 30+ tile clicks, count 0 → 2.
 - **Android 17 background audio hardening**: `setRingerMode()` is *silently ignored* unless the app
   has a visible activity or a non-`shortService` foreground service. For targetSdk 37 the FGS must
   also have while-in-use (WIU) capability. Zen rule changes (Silent) are not affected.
@@ -93,6 +97,16 @@ Normal/Vibrate via `AudioManager.setRingerMode()`. Main device: Pixel 8 on Andro
 7. **Release crash fix** (`5c638bd`, owner) – restored `strictFullModeForKeepRules=false`
    (I wrongly removed it in step 3), debug-key signing, version 2.0.2 (tag `v2.0.2`).
 
+## Session log (Nov 2026, Ubuntu VM)
+8. **README** (`77ec828`) – new screenshots from the API 37 emulator, Installation section.
+9. **UI fixes, 2.0.3** (branch `ui_fixes`, tag `v2.0.3`) – widget follows external ringer changes,
+   widget background, status bar contrast, widget name, monochrome icon, "Tile added" button
+   state, static preview colors, README widget screenshots.
+10. **Cleanup** (branch `cleanup`) – `mipmap-anydpi`, unused resources, template tests removed.
+11. **Gradle 9.9.1 / AGP 9.5.1** (branch `gradle_update`) – lint clean.
+12. **Silent → Normal fix, 2.0.4** (branch `fix_silent_to_normal`, tag `v2.0.4`).
+13. **Generated widget preview, 2.0.5** (branch `widget_preview`).
+
 ### Measured outputs
 - Release APK size: 37.0 MB (with ads SDK, no R8) → 26.5 MB (no ads SDK) → ~2.1 MB (R8).
 - Emulator (API 37, release build, hardening `enable`, app process killed before first tap):
@@ -115,11 +129,15 @@ Normal/Vibrate via `AudioManager.setRingerMode()`. Main device: Pixel 8 on Andro
       (`onlyIfChanged = true`). Changes made while the process is dead show up the next time the
       process starts or Quick Settings is opened.
 - [x] Monochrome launcher icon layer added (2.0.3).
-- [ ] `mipmap-anydpi-v26` folder is obsolete with minSdk 35; unused template colors and
-      `ic_launcher_background` drawable (lint warnings).
-- [x] `versionCode` 15 / 2.0.3 – keep increasing it on every release.
-- [ ] Glance 1.2 generated widget previews (Android 15+ widget picker) – not implemented.
-- [ ] Template tests `ExampleUnitTest` / `ExampleInstrumentedTest` can be removed.
+- [x] `mipmap-anydpi-v26` moved to `mipmap-anydpi`; unused template colors and
+      `ic_launcher_background` drawable removed. Lint is clean.
+- [x] `versionCode` 17 / 2.0.5 – keep increasing it on every release.
+- [x] Generated widget picker preview (2.0.5): `ToggleAllWidgetGlance.providePreview()`, published by
+      `publishWidgetPreviews()` from `SoundModesApp` once per versionCode (stored in prefs).
+      `setWidgetPreviews()` is rate limited (result 1 = `RATE_LIMITED`, then retried on the next
+      process start). Static `previewLayout` stays as the fallback. To test it, `pm clear` the app
+      (resets the stored version, re-grant DND with `cmd notification allow_dnd`).
+- [x] Template tests removed (`androidTest` dependencies kept for future device tests).
 
 ## Risks / thoughts
 - Debug-key signing: back up `C:\Users\helsi\.android\debug.keystore`. The Ubuntu VM has its own
