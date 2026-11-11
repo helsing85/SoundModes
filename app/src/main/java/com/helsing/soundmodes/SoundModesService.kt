@@ -10,6 +10,7 @@ import android.media.AudioManager
 import android.provider.Settings
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
+import com.helsing.soundmodes.widgets.ToggleAllWidgetGlanceReceiver
 
 
 class SoundModesService : TileService() {
@@ -79,6 +80,9 @@ class SoundModesService : TileService() {
             isReceiverRegistered = true
         }
         refreshTile()
+        // Opening Quick Settings is a good moment to fix a widget which missed a change
+        // made while the app process was dead (e.g. with the volume buttons)
+        ToggleAllWidgetGlanceReceiver.updateAllGlanceWidgets(this, onlyIfChanged = true)
     }
 
     override fun onStopListening() {
